@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       username: normalizedUsername,
     })
 
-    // Generate token
+    
     const token = generateToken({
       userId: user._id.toString(),
       email: user.email,
