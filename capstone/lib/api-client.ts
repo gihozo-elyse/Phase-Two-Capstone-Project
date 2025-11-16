@@ -1,5 +1,3 @@
-
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api'
 
 export async function apiRequest(
@@ -8,9 +6,10 @@ export async function apiRequest(
 ): Promise<Response> {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
 
-  const headers: HeadersInit = {
+  // Use Record<string, string> to satisfy TS
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options.headers,
+    ...(options.headers as Record<string, string>),
   }
 
   if (token) {
@@ -78,4 +77,3 @@ export async function apiDelete<T>(endpoint: string): Promise<T> {
   }
   return response.json()
 }
-
