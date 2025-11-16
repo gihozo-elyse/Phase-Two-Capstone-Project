@@ -195,14 +195,14 @@ export default function WritePage() {
                 {preview ? 'Edit' : 'Preview'}
               </Button>
             </div>
-          <MarkdownEditor
-            value={content}
-            onChange={setContent}
-            preview={preview}
-          />
+            <MarkdownEditor
+              value={content}
+              onChange={setContent}
+              preview={preview}
+            />
+          </div>
         </div>
       </div>
     </div>
   )
 }
-
