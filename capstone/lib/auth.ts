@@ -32,13 +32,22 @@ export async function comparePassword(
 }
 
 export function getTokenFromRequest(
-  headers: Headers | Record<string, string>
+  headers: Headers | Record<string, string | string[] | undefined>
 ): string | null {
-  const authHeader =
-    'get' in headers ? headers.get('authorization') : headers.authorization
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return null
+  let authHeader: string | null = null;
+  
+  if (headers instanceof Headers) {
+    authHeader = headers.get('authorization');
+  } else if (typeof headers.authorization === 'string') {
+    authHeader = headers.authorization;
+  } else if (Array.isArray(headers.authorization)) {
+    authHeader = headers.authorization[0];
   }
-  return authHeader.substring(7)
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return null;
+  }
+  
+  return authHeader.substring(7);
 }
 
