@@ -1,8 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Document, Types } from 'mongoose'
 import connectDB from '@/lib/mongodb'
 import User from '@/models/User'
 import Post from '@/models/Post'
 import Follow from '@/models/Follow'
+
+interface UserType extends Document {
+  _id: Types.ObjectId
+  [key: string]: any
+}
+
+interface PostType extends Document {
+  _id: Types.ObjectId
+  tags: Array<{ _id: Types.ObjectId; name: string; slug: string }>
+  [key: string]: any
+}
 
 export async function GET(
   request: NextRequest,
@@ -11,16 +23,16 @@ export async function GET(
   try {
     await connectDB()
 
-    const user = await User.findById(params.id).select('-password').lean()
+    const user = await User.findById(params.id).select('-password').lean() as UserType | null
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
     
-    const posts = await Post.find({ author: params.id, published: true })
+    const posts = (await Post.find({ author: params.id, published: true })
       .populate('tags', 'name slug')
       .sort({ published_at: -1 })
-      .lean()
+      .lean()) as PostType[]
 
     
     const [followersCount, followingCount] = await Promise.all([
