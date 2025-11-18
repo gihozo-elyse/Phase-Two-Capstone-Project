@@ -10,9 +10,15 @@ interface UserType extends Document {
   [key: string]: any
 }
 
-interface PostType extends Document {
+interface TagType {
   _id: Types.ObjectId
-  tags: Array<{ _id: Types.ObjectId; name: string; slug: string }>
+  name: string
+  slug: string
+}
+
+interface PostType {
+  _id: Types.ObjectId
+  tags: TagType[]
   [key: string]: any
 }
 
@@ -32,7 +38,7 @@ export async function GET(
     const posts = (await Post.find({ author: params.id, published: true })
       .populate('tags', 'name slug')
       .sort({ published_at: -1 })
-      .lean()) as PostType[]
+      .lean()) as unknown as PostType[]
 
     
     const [followersCount, followingCount] = await Promise.all([

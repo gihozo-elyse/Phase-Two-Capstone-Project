@@ -26,6 +26,7 @@ const PostSchema = new Schema<IPost>(
       required: true,
       unique: true,
       lowercase: true,
+      index: true,  // Added index here instead of separate index call
     },
     content: {
       type: String,
@@ -62,9 +63,9 @@ const PostSchema = new Schema<IPost>(
   }
 )
 
-PostSchema.index({ slug: 1 })
+// Indexes
 PostSchema.index({ author: 1 })
-PostSchema.index({ published: 1, published_at: -1 })
+PostSchema.index({ published: 1, published_at: -1 })  // For sorting published posts
 
 export default mongoose.models.Post || mongoose.model<IPost>('Post', PostSchema)
 

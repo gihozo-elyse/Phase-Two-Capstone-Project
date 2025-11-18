@@ -19,6 +19,7 @@ const TagSchema = new Schema<ITag>(
       required: true,
       unique: true,
       lowercase: true,
+      index: true,  // Moved index here to avoid duplicate index warning
     },
   },
   {
