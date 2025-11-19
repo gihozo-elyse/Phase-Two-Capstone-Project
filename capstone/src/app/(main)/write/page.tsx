@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { apiPost } from '@/lib/api-client'
@@ -21,6 +21,8 @@ export default function WritePage() {
   const [published, setPublished] = useState(false)
   const [saving, setSaving] = useState(false)
   const [preview, setPreview] = useState(false)
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const [uploadedImageName, setUploadedImageName] = useState('')
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -46,6 +48,39 @@ export default function WritePage() {
 
   const handleRemoveTag = (tagToRemove: string) => {
     setTags(tags.filter((tag) => tag !== tagToRemove))
+  }
+
+  const handleCoverImageUpload = async (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0]
+    if (!file) {
+      return
+    }
+
+    setUploadingImage(true)
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const response = await fetch('/api/uploads', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to upload image')
+      }
+
+      const data = await response.json()
+      setCoverImage(data.url)
+      setUploadedImageName(file.name)
+    } catch (error: any) {
+      console.error('Image upload error:', error)
+      alert(error.message || 'Failed to upload image')
+    } finally {
+      setUploadingImage(false)
+    }
   }
 
   const handleSave = async (publish: boolean) => {
@@ -134,15 +169,51 @@ export default function WritePage() {
 
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-300">
-              Cover Image URL (optional)
+              Cover Image (optional)
             </label>
-            <input
-              type="url"
-              value={coverImage}
-              onChange={(e) => setCoverImage(e.target.value)}
-              placeholder="https://example.com/image.jpg"
-              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent placeholder-gray-500"
-            />
+            <div className="space-y-3">
+              <input
+                type="url"
+                value={coverImage}
+                onChange={(e) => {
+                  setCoverImage(e.target.value)
+                  setUploadedImageName('')
+                }}
+                placeholder="https://example.com/image.jpg"
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent placeholder-gray-500"
+              />
+              <div className="flex flex-wrap items-center gap-3">
+                <label
+                  htmlFor="cover-image-upload"
+                  className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-yellow-500/40 px-4 py-2 text-sm font-medium text-yellow-500 hover:bg-yellow-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <input
+                    id="cover-image-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleCoverImageUpload}
+                    disabled={uploadingImage}
+                  />
+                  {uploadingImage ? 'Uploading...' : 'Upload from device'}
+                </label>
+                {uploadedImageName && (
+                  <span className="text-sm text-gray-400">
+                    Selected: {uploadedImageName}
+                  </span>
+                )}
+                {coverImage && (
+                  <a
+                    href={coverImage}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm text-yellow-400 underline"
+                  >
+                    View current image
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
 
           <div>
