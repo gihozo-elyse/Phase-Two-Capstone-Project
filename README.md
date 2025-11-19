@@ -1,163 +1,112 @@
-# Medium Clone - Capstone Project
+# Medium Clone – Capstone Project
 
-A full-featured publishing platform inspired by Medium, built with Next.js 14, React, TypeScript, and MongoDB.
+A full-featured publishing platform inspired by Medium, built with Next.js 14, React, TypeScript, MongoDB, and Tailwind CSS.
 
-##  Features
+## Features
 
--  **Authentication**: Signup, login, and protected routes
--  **Rich Text Editor**: Markdown-based editor with preview
--  **Posts Management**: Full CRUD operations with drafts and publishing
--  **Tags System**: Organize posts with tags
--  **Search**: Full-text search across posts
--  **Comments**: Comment on posts
--  **Likes/Claps**: Like posts
--  **Follow System**: Follow authors and see their posts
--  **Responsive Design**: Works on all devices
--  **SEO Optimized**: Meta tags and Open Graph support
--  **Performance**: Optimized with React Query and Next.js caching
+- **Authentication** – Email/password signup, login, and protected routes
+- **Rich Text Editor** – Markdown editor with live preview
+- **Post Management** – Drafts, publishing, cover images, and SEO-ready slugs
+- **Tags & Search** – Full‑text search and tag filtering
+- **Community** – Comments, likes, follows, and author profiles
+- **Responsive & SEO Friendly** – Optimized for devices and sharing
 
-##  Tech Stack
+## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Backend**: MongoDB + Mongoose
-- **Authentication**: JWT tokens
-- **Data Fetching**: TanStack Query (React Query)
-- **Styling**: Tailwind CSS
-- **Testing**: Jest + React Testing Library
-- **Markdown**: react-markdown with syntax highlighting
+- Framework: Next.js 14 (App Router)
+- Language: TypeScript
+- Database: MongoDB with Mongoose
+- Auth: JWT tokens
+- Data Fetching: TanStack Query
+- Styling: Tailwind CSS
+- Testing: Jest + React Testing Library
 
-## 📋 Prerequisites
+## Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
-- MongoDB database (MongoDB Atlas free tier works)
+- MongoDB connection 
 
-##  Quick Start
+## Quick Start
 
-### 1. Install Dependencies
+1. **Install dependencies**
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
-### 2. Set Up MongoDB
+2. **Configure environment**
 
-1. Create a cluster at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a database user and whitelist your IP
-3. Get your connection string from "Connect" > "Connect your application"
+   Create `.env.local`:
 
-### 3. Configure Environment Variables
+   ```env
+   MONGODB_URI=your_mongodb_connection_string
+   JWT_SECRET=your-secret-key-change-in-production
+   ```
 
-Create `.env.local`:
+3. **Run the dev server**
 
-```env
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your-secret-key-change-in-production
-```
+   ```bash
+   npm run dev
+   ```
 
-### 4. Set Up Database
+   Visit [http://localhost:3000](http://localhost:3000)
 
-The database schema is automatically created using Mongoose models when you first run the application.
-
-### 5. Run Development Server
-
-```bash
-npm run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000)
-
-##  Project Structure
+## Project Structure
 
 ```
-├── app/                      
-│   ├── (auth)/              
-│   │   ├── login/
-│   │   └── signup/
-│   ├── (main)/             
-│   │   ├── posts/[slug]/   
-│   │   ├── profile/[id]/    
-│   │   ├── tags/[slug]/ 
-│   │   ├── search/          
-│   │   └── write/           
-│   ├── layout.tsx           
-│   └── page.tsx            
+├── app
+│   ├── (auth)/
+│   ├── (main)/
+│   ├── layout.tsx
+│   └── page.tsx
 ├── components/
-│   ├── editor/              
-│   ├── layout/              
-│   ├── post/                
-│   ├── ui/                  
-│   └── user/                
-├── hooks/                   
+├── hooks/
 ├── lib/
-│   ├── supabase/           
-│   └── utils.ts            
-├── types/       
-├── supabase/
-│   └── schema.sql          
-└── __tests__/              
+├── models/
+├── public/
+├── src/app/api/
+├── types/
+└── __tests__/
 ```
 
-##  Testing
+## Testing
 
 ```bash
-# Run tests
-npm test
-
-# Watch mode
+npm test          
 npm run test:watch
 ```
 
-##  Build
+## Build & Deploy
 
 ```bash
-# Type check
 npm run type-check
-
-# Build for production
 npm run build
-
-# Start production server
-npm start
+npm start         
 ```
 
-##  Deployment
-phase-two-capstone-project.vercel.app
+Deployed example: `phase-two-capstone-project.vercel.app`
 
+## Feature Highlights
 
 ### Rich Text Editor
-- Markdown-based editor
-- Live preview
-- Syntax highlighting for code blocks
-- Support for images, links, lists, etc.
+- Markdown with syntax highlighting
+- Live preview and media embeds
 
 ### Posts
-- Create, edit, delete posts
-- Save as drafts
-- Publish with timestamps
-- SEO-friendly slugs
-- Cover images
+- Create, edit, delete, and save drafts
+- Publish with tags, cover images, and excerpts
 
-### Social Features
-- Like posts
-- Comment on posts
-- Follow authors
-- View author profiles
+### Social
+- Like, comment, and follow authors
+- Personalized feeds and profiles
 
-### Search & Discovery
+### Discovery
 - Full-text search
-- Tag filtering
-- Home feed with latest posts
+- Tag-based exploration
 
-### Screenshot
+## Screenshot
 
 ![alt text](<capstone/public/Screenshot 2025-11-18 170314.png>)
-
-
-
-
-
-
-
-
+## deployed link 
+phase-two-capstone-project.vercel.app
