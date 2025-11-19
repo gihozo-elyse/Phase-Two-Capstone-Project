@@ -1,19 +1,19 @@
 # Medium Clone – Capstone Project
 
-A full-featured publishing platform inspired by Medium, built with Next.js 14, React, TypeScript, MongoDB, and Tailwind CSS.
+A full-featured publishing platform inspired by Medium, built with Next.js 14, React, TypeScript, MongoDB, and Tailwind CSS.
 
 ## Features
 
 - **Authentication** – Email/password signup, login, and protected routes
 - **Rich Text Editor** – Markdown editor with live preview
 - **Post Management** – Drafts, publishing, cover images, and SEO-ready slugs
-- **Tags & Search** – Full‑text search and tag filtering
+- **Tags & Search** – Full-text search and tag filtering
 - **Community** – Comments, likes, follows, and author profiles
 - **Responsive & SEO Friendly** – Optimized for devices and sharing
 
 ## Tech Stack
 
-- Framework: Next.js 14 (App Router)
+- Framework: Next.js 14 (App Router)
 - Language: TypeScript
 - Database: MongoDB with Mongoose
 - Auth: JWT tokens
@@ -25,7 +25,7 @@ A full-featured publishing platform inspired by Medium, built with Next.js 14, 
 
 - Node.js 18+
 - npm or yarn
-- MongoDB connection 
+- MongoDB connection string (Atlas works great)
 
 ## Quick Start
 
@@ -73,7 +73,7 @@ A full-featured publishing platform inspired by Medium, built with Next.js 14, 
 ## Testing
 
 ```bash
-npm test          
+npm test          # Run tests once
 npm run test:watch
 ```
 
@@ -82,10 +82,10 @@ npm run test:watch
 ```bash
 npm run type-check
 npm run build
-npm start         
+npm start         # Production server
 ```
 
-Deployed example: `phase-two-capstone-project.vercel.app`
+Deployed example: [phase-two-capstone-project.vercel.app](https://phase-two-capstone-project.vercel.app)
 
 ## Feature Highlights
 
@@ -108,5 +108,7 @@ Deployed example: `phase-two-capstone-project.vercel.app`
 ## Screenshot
 
 ![alt text](<capstone/public/Screenshot 2025-11-18 170314.png>)
-## deployed link 
-phase-two-capstone-project.vercel.app
+
+## Deployed Link
+
+[phase-two-capstone-project.vercel.app](https://phase-two-capstone-project.vercel.app)
