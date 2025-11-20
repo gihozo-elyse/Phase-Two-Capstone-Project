@@ -11,8 +11,12 @@ export function formatDate(date: string | Date): string {
   }).format(d)
 }
 
-export function formatRelativeTime(date: string | Date): string {
+export function formatRelativeTime(date?: string | Date | null): string {
+  if (!date) return 'just now'
   const d = typeof date === 'string' ? new Date(date) : date
+
+  if (Number.isNaN(d.getTime())) return 'just now'
+
   const now = new Date()
   const diffInSeconds = Math.floor((now.getTime() - d.getTime()) / 1000)
 
