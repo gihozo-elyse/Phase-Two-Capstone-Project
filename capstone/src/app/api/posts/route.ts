@@ -9,7 +9,11 @@ import { verifyToken, getTokenFromRequest } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
+    console.log('API: Starting posts fetch')
+    console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI)
+    
     await connectDB()
+    console.log('API: Database connected')
 
     const { searchParams } = new URL(request.url)
     const published = searchParams.get('published') !== 'false'
@@ -21,6 +25,7 @@ export async function GET(request: NextRequest) {
       query.published = true
     }
 
+    console.log('API: Querying posts with:', query)
     const posts = await Post.find(query)
       .populate('author', 'full_name username avatar_url email')
       .populate('tags', 'name slug')
@@ -28,6 +33,8 @@ export async function GET(request: NextRequest) {
       .limit(limit)
       .skip(skip)
       .lean()
+
+    console.log('API: Found posts:', posts.length)
 
     // Get like and comment counts
     const Like = (await import('@/models/Like')).default
@@ -63,6 +70,7 @@ export async function GET(request: NextRequest) {
       })
     )
 
+    console.log('API: Returning posts:', postsWithCounts.length)
     return NextResponse.json(postsWithCounts)
   } catch (error: any) {
     console.error('Get posts error:', error)
