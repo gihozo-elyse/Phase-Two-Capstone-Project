@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 async function getProfile(id: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/users/${id}`, {
+    const res = await fetch(`/api/users/${id}`, {
       cache: 'no-store',
     })
     if (!res.ok) return null

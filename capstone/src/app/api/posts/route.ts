@@ -25,6 +25,10 @@ export async function GET(request: NextRequest) {
       query.published = true
     }
 
+    const totalPosts = await Post.countDocuments({})
+    const publishedPosts = await Post.countDocuments({ published: true })
+    console.log('API: Total posts in DB:', totalPosts)
+    console.log('API: Published posts in DB:', publishedPosts)
     console.log('API: Querying posts with:', query)
     const posts = await Post.find(query)
       .populate('author', 'full_name username avatar_url email')
@@ -35,6 +39,7 @@ export async function GET(request: NextRequest) {
       .lean()
 
     console.log('API: Found posts:', posts.length)
+    console.log('API: Sample post:', posts[0] ? { id: posts[0]._id, title: posts[0].title, published: posts[0].published } : 'No posts')
 
     // Get like and comment counts
     const Like = (await import('@/models/Like')).default
