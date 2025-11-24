@@ -5,6 +5,7 @@ export const revalidate = 0
 import connectDB from '@/lib/mongodb'
 import Post from '@/models/Post'
 import Tag from '@/models/Tag'
+import User from '@/models/User'
 import { verifyToken, getTokenFromRequest } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
