@@ -5,11 +5,7 @@ import PostCard from '@/components/post/PostCard';
 
 async function getPosts() {
   try {
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : 'http://localhost:3000';
-    
-    const url = `${baseUrl}/api/posts?published=true&limit=20`;
+    const url = `/api/posts?published=true&limit=20`;
     console.log('Fetching from:', url);
     
     const res = await fetch(url, {

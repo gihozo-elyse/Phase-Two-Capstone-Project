@@ -5,9 +5,14 @@ import { comparePassword, generateToken } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('Signin API: Starting signin request')
+    console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI)
+    console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET)
+    
     // Connect to database
     try {
       await connectDB()
+      console.log('Signin API: Database connected successfully')
     } catch (dbError: any) {
       console.error('Database connection error:', dbError)
       return NextResponse.json(
@@ -17,22 +22,26 @@ export async function POST(request: NextRequest) {
     }
 
     const { email, password } = await request.json()
+    console.log('Signin API: Received email:', email)
 
     if (!email || !password) {
+      console.log('Signin API: Missing email or password')
       return NextResponse.json(
         { error: 'Email and password are required' },
         { status: 400 }
       )
     }
 
-    
+    console.log('Signin API: Looking for user with email:', email.toLowerCase().trim())
     const user = await User.findOne({ email: email.toLowerCase().trim() })
     if (!user) {
+      console.log('Signin API: User not found')
       return NextResponse.json(
         { error: 'Invalid email or password' },
         { status: 401 }
       )
     }
+    console.log('Signin API: User found:', user.email)
 
     // Check password
     const isValid = await comparePassword(password, user.password)
