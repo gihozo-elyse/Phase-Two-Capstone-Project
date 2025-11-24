@@ -5,8 +5,13 @@ import PostCard from '@/components/post/PostCard';
 
 async function getPosts() {
   try {
+    // Use VERCEL_URL for production, localhost for development
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : 'http://localhost:3000';
+    
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/posts?published=true&limit=20`,
+      `${baseUrl}/api/posts?published=true&limit=20`,
       {
         cache: "no-store",
       }
