@@ -111,13 +111,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Generate slug
-    const slug = title
+    // Generate unique slug
+    let baseSlug = title
       .toLowerCase()
       .trim()
       .replace(/[^\w\s-]/g, '')
       .replace(/[\s_-]+/g, '-')
       .replace(/^-+|-+$/g, '')
+    
+    let slug = baseSlug
+    let counter = 1
+    
+    // Check if slug exists and make it unique
+    while (await Post.findOne({ slug })) {
+      slug = `${baseSlug}-${counter}`
+      counter++
+    }
 
     // Handle tags
     const tagIds = []
