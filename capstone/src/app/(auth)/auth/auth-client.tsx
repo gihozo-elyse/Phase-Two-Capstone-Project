@@ -57,7 +57,7 @@ export default function AuthPageClient() {
         response = await apiPost<AuthResponse>('/auth/signin', { email, password })
       }
 
-      // Save token in localStorage
+      
       if (response?.token) {
         localStorage.setItem('token', response.token)
         window.dispatchEvent(new Event('token-updated'))
@@ -66,7 +66,7 @@ export default function AuthPageClient() {
         setError('Invalid response from server')
       }
     } catch (err: any) {
-      // Safely handle unknown error type
+      
       if (err?.error) setError(err.error)
       else if (err?.message) setError(err.message)
       else setError('An unexpected error occurred')
