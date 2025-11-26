@@ -3,9 +3,20 @@ export const fetchCache = "force-no-store";
 
 import PostCard from '@/components/post/PostCard';
 
+const getBaseUrl = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+  return 'http://localhost:3000'
+}
+
 async function getPosts() {
   try {
-    const url = `/api/posts?published=true&limit=20`;
+    const baseUrl = getBaseUrl()
+    const url = `${baseUrl}/api/posts?published=true&limit=20`;
     console.log('Fetching from:', url);
     
     const res = await fetch(url, {

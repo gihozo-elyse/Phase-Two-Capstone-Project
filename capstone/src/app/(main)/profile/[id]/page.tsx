@@ -3,9 +3,20 @@ import PostCard from '@/components/post/PostCard'
 import FollowButton from '@/components/user/FollowButton'
 import Image from 'next/image'
 
+const getBaseUrl = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+  return 'http://localhost:3000'
+}
+
 async function getProfile(id: string) {
   try {
-    const res = await fetch(`/api/users/${id}`, {
+    const baseUrl = getBaseUrl()
+    const res = await fetch(`${baseUrl}/api/users/${id}`, {
       cache: 'no-store',
     })
     if (!res.ok) return null
