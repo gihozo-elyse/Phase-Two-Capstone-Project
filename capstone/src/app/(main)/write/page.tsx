@@ -1,16 +1,18 @@
 'use client'
 
 import { useState, useEffect, ChangeEvent } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
-import { apiPost } from '@/lib/api-client'
-import { slugify, generateExcerpt } from '@/lib/utils'
+import { apiGet, apiPost, apiPut } from '@/lib/api-client'
+import { generateExcerpt } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import MarkdownEditor from '@/components/editor/MarkdownEditor'
 
 export default function WritePage() {
   const { user, loading: authLoading } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const draftId = searchParams.get('draft')
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -20,15 +22,41 @@ export default function WritePage() {
   const [tagInput, setTagInput] = useState('')
   const [published, setPublished] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [saveMode, setSaveMode] = useState<'draft' | 'publish' | null>(null)
   const [preview, setPreview] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(false)
   const [uploadedImageName, setUploadedImageName] = useState('')
+  const [postId, setPostId] = useState<string | null>(null)
+
+  const isEditing = Boolean(postId)
 
   useEffect(() => {
     if (!authLoading && !user) {
       router.push('/auth?mode=signin&redirect=/write')
     }
   }, [user, authLoading, router])
+
+  useEffect(() => {
+    async function loadDraft(id: string) {
+      try {
+        const data = await apiGet<any>(`/posts/${id}`)
+        if (data) {
+          setPostId(data.id)
+          setTitle(data.title || '')
+          setContent(data.content || '')
+          setExcerpt(data.excerpt || '')
+          setCoverImage(data.cover_image || '')
+          setTags(data.tags?.map((tag: any) => tag.name) || [])
+        }
+      } catch (error) {
+        console.error('Failed to load draft', error)
+      }
+    }
+
+    if (draftId) {
+      loadDraft(draftId)
+    }
+  }, [draftId])
 
   if (authLoading) {
     return <div className="container mx-auto px-4 py-8">Loading...</div>
@@ -90,19 +118,28 @@ export default function WritePage() {
     }
 
     setSaving(true)
+    setSaveMode(publish ? 'publish' : 'draft')
 
     try {
       const postExcerpt = excerpt || generateExcerpt(content)
 
       // Create or update post via API
-      const postData = await apiPost<any>('/posts', {
+      const payload = {
         title,
         content,
         excerpt: postExcerpt,
         cover_image: coverImage || null,
         tags: tags,
         published: publish,
-      })
+      }
+
+      const postData = postId
+        ? await apiPut<any>(`/posts/${postId}`, payload)
+        : await apiPost<any>('/posts', payload)
+
+      if (!postId && postData?.id) {
+        setPostId(postData.id)
+      }
 
       if (publish) {
         router.push(`/posts/${postData.slug}`)
@@ -114,6 +151,7 @@ export default function WritePage() {
       alert('Error saving post: ' + error.message)
     } finally {
       setSaving(false)
+      setSaveMode(null)
     }
   }
 
@@ -121,21 +159,28 @@ export default function WritePage() {
     <div className="min-h-screen bg-black">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-white">Write a Post</h1>
+          <div>
+            <h1 className="text-3xl font-bold text-white">Write a Post</h1>
+            {isEditing && (
+              <p className="text-sm text-gray-400 mt-1">
+                Editing saved draft
+              </p>
+            )}
+          </div>
           <div className="flex gap-2">
             <Button
               variant="outline-golden"
               onClick={() => handleSave(false)}
-              disabled={saving}
+              disabled={saving && saveMode === 'draft'}
             >
-              {saving ? 'Saving...' : 'Save Draft'}
+              {saving && saveMode === 'draft' ? 'Saving...' : 'Save Draft'}
             </Button>
             <Button
               variant="golden"
               onClick={() => handleSave(true)}
-              disabled={saving}
+              disabled={saving && saveMode === 'publish'}
             >
-              {saving ? 'Publishing...' : 'Publish'}
+              {saving && saveMode === 'publish' ? 'Publishing...' : 'Publish'}
             </Button>
           </div>
         </div>

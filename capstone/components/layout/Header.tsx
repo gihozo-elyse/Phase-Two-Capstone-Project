@@ -37,6 +37,7 @@ export default function Header() {
     ? [
         ...commonLinks,
         { label: 'Profile', href: `/profile/${user.id}` },
+        { label: 'Drafts', href: '/drafts' },
         { label: 'Write', href: '/write' },
       ]
     : [...commonLinks]

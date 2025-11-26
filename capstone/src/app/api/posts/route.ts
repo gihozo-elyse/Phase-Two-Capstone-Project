@@ -7,6 +7,7 @@ import Post from '@/models/Post'
 import Tag from '@/models/Tag'
 import User from '@/models/User'
 import { verifyToken, getTokenFromRequest } from '@/lib/auth'
+import { isValidObjectId } from 'mongoose'
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,12 +19,19 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const published = searchParams.get('published') !== 'false'
+    const author = searchParams.get('author')
     const limit = parseInt(searchParams.get('limit') || '20')
     const skip = parseInt(searchParams.get('skip') || '0')
 
-    const query: any = {}
+    const query: Record<string, any> = {}
     if (published) {
       query.published = true
+    } else {
+      query.published = false
+    }
+
+    if (author && isValidObjectId(author)) {
+      query.author = author
     }
 
     const totalPosts = await Post.countDocuments({})
@@ -101,6 +109,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
     }
 
+    // Ensure author exists (also prevents Mongoose model tree-shaking in prod)
+    const author = await User.findById(payload.userId).select('_id')
+    if (!author) {
+      return NextResponse.json({ error: 'Author not found' }, { status: 404 })
+    }
+
     const data = await request.json()
     const { title, content, excerpt, cover_image, tags, published } = data
 
@@ -147,7 +161,7 @@ export async function POST(request: NextRequest) {
       content,
       excerpt,
       cover_image,
-      author: payload.userId,
+      author: author._id,
       published: published || false,
       published_at: published ? new Date() : null,
       tags: tagIds,
