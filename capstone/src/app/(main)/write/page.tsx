@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, ChangeEvent } from 'react'
+import { Suspense, useState, useEffect, ChangeEvent } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { apiGet, apiPost, apiPut } from '@/lib/api-client'
@@ -8,7 +8,7 @@ import { generateExcerpt } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import MarkdownEditor from '@/components/editor/MarkdownEditor'
 
-export default function WritePage() {
+function WritePageContent() {
   const { user, loading: authLoading } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -320,5 +320,13 @@ export default function WritePage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function WritePage() {
+  return (
+    <Suspense fallback={<div className="container mx-auto px-4 py-8">Loading...</div>}>
+      <WritePageContent />
+    </Suspense>
   )
 }
