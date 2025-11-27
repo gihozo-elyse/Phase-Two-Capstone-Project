@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
-import Post from '@/src/app/models/Post'
-import Tag from '@/src/app/models/Tag'
+import Post from '@/models/Post'
+import Tag from '@/models/Tag'
 import { getTokenFromRequest, verifyToken } from '@/lib/auth'
 import { isValidObjectId } from 'mongoose'
 
 async function serializePost(post: any) {
-  const Like = (await import('@/src/app/models/Like')).default
-  const Comment = (await import('@/src/app/models/Comment')).default
+  const Like = (await import('@/models/Like')).default
+  const Comment = (await import('@/models/Comment')).default
 
   const [likeCount, commentCount] = await Promise.all([
     Like.countDocuments({ post: post._id }),

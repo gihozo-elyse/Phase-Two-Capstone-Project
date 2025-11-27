@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
-import Tag from '@/src/app/models/Tag'
-import Post from '@/src/app/models/Post'
+import Tag from '@/models/Tag'
+import Post from '@/models/Post'
 import { Types } from 'mongoose'
 
 interface TagLean {
@@ -54,8 +54,8 @@ export async function GET(
       .sort({ published_at: -1 })
       .lean<PostLean[]>()
 
-    const Like = (await import('@/src/app/models/Like')).default
-    const Comment = (await import('@/src/app/models/Comment')).default
+    const Like = (await import('@/models/Like')).default
+    const Comment = (await import('@/models/Comment')).default
 
     const postsWithCounts = await Promise.all(
       posts.map(async (post) => {
