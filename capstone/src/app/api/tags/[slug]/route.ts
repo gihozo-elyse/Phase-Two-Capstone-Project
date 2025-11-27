@@ -12,6 +12,7 @@ interface TagLean {
   updatedAt: Date
 }
 
+//interface for lean Post with author and tags populated
 interface AuthorLean {
   _id: Types.ObjectId
   full_name?: string

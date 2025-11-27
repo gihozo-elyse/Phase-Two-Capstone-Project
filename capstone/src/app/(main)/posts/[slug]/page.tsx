@@ -5,20 +5,9 @@ import LikeButton from '@/components/post/LikeButton'
 import { formatDate } from '@/lib/utils'
 import Image from 'next/image'
 
-const getBaseUrl = () => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL
-  }
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`
-  }
-  return 'http://localhost:3000'
-}
-
 async function getPost(slug: string) {
   try {
-    const baseUrl = getBaseUrl()
-    const res = await fetch(`${baseUrl}/api/posts/by-slug/${slug}`, {
+    const res = await fetch(`/api/posts/by-slug/${slug}`, {
       cache: 'no-store',
     })
     if (!res.ok) return null
