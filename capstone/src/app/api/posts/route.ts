@@ -3,9 +3,11 @@ import { NextRequest, NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 import connectDB from '@/lib/mongodb'
-import Post from '@/app/models/Post'
-import Tag from '@/app/models/Tag'
-import User from '@/app/models/User'
+import Post from '../../models/Post'
+import Tag from '../../models/Tag'
+import User from '../../models/User'
+
+
 import { verifyToken, getTokenFromRequest } from '@/lib/auth'
 import { isValidObjectId } from 'mongoose'
 
@@ -51,8 +53,8 @@ export async function GET(request: NextRequest) {
     console.log('API: Sample post:', posts[0] ? { id: posts[0]._id, title: posts[0].title, published: posts[0].published } : 'No posts')
 
     // Get like and comment counts
-    const Like = (await import('@/app/models/Like')).default
-    const Comment = (await import('@/app/models/Comment')).default
+    const Like = (await import('../../models/Like')).default
+    const Comment = (await import('../../models/Comment')).default
 
     const postsWithCounts = await Promise.all(
       posts.map(async (post: any) => {

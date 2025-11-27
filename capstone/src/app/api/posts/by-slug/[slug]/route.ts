@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Document } from 'mongoose'
 import connectDB from '@/lib/mongodb'
-import Post from '@/app/models/Post'
-import Like from '@/app/models/Like'
-import Comment from '@/app/models/Comment'
+import Post from '../../../../models/Post'
+import Like from '../../../../models/Like'
+import Comment from '../../../../models/Comment'
 
 interface Author {
   _id: any

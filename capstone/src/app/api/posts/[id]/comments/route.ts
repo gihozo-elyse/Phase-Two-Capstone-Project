@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
-import Comment from '@/app/models/Comment'
+import Comment from '../../../../models/Comment'
 import { verifyToken, getTokenFromRequest } from '@/lib/auth'
 
 export async function GET(

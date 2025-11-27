@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
-import Like from '@/app/models/Like'
+import Like from '../../../../models/Like'
 import { verifyToken, getTokenFromRequest } from '@/lib/auth'
 
 export async function POST(
