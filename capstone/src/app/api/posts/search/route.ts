@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 import connectDB from '@/lib/mongodb'
-import Post from '@/models/Post'
+import Post from '@/app/models/Post'
 
 export async function GET(request: NextRequest) {
   try {
@@ -32,8 +32,8 @@ export async function GET(request: NextRequest) {
       .lean()
 
     
-    const Like = (await import('@/models/Like')).default
-    const Comment = (await import('@/models/Comment')).default
+    const Like = (await import('@/app/models/Like')).default
+    const Comment = (await import('@/app/models/Comment')).default
 
     const postsWithCounts = await Promise.all(
       posts.map(async (post: any) => {

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Document, Types } from 'mongoose'
 import connectDB from '@/lib/mongodb'
-import User from '@/models/User'
-import Post from '@/models/Post'
-import Follow from '@/models/Follow'
+import User from '@/app/models/User'
+import Post from '@/app/models/Post'
+import Follow from '@/app/models/Follow'
 
 interface UserType extends Document {
   _id: Types.ObjectId
@@ -47,8 +47,8 @@ export async function GET(
     ])
 
     
-    const Like = (await import('@/models/Like')).default
-    const Comment = (await import('@/models/Comment')).default
+    const Like = (await import('@/app/models/Like')).default
+    const Comment = (await import('@/app/models/Comment')).default
 
     const postsWithCounts = await Promise.all(
       posts.map(async (post: any) => {
