@@ -13,6 +13,7 @@ const getBaseUrl = () => {
   return 'http://localhost:3000'
 }
 
+//getting profile
 async function getProfile(id: string) {
   try {
     const baseUrl = getBaseUrl()
@@ -89,7 +90,7 @@ export default async function ProfilePage({
                 />
               ))
             ) : (
-              <p className="text-gray-500">No posts yet.</p>
+              <p className="text-gray-500">No posts yet!!!!!!.</p>
             )}
           </div>
         </div>
