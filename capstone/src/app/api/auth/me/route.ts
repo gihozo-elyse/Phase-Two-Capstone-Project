@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 import connectDB from '@/lib/mongodb'
-import User from '@/models/User'
+import User from '@/src/app/models/User'
 import { verifyToken, getTokenFromRequest } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {

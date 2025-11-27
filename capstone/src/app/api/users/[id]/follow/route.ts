@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
-import Follow from '@/models/Follow'
+import Follow from '@/src/app/models/Follow'
 import { verifyToken, getTokenFromRequest } from '@/lib/auth'
 
 export async function POST(
