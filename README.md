@@ -111,4 +111,4 @@ Deployed example: [phase-two-capstone-project.vercel.app](https://phase-two-caps
 
 ## Deployed Link
 
-[phase-two-capstone-project.vercel.app](https://phase-two-capstone-project.vercel.app)
+[phase-two-capstone-project.vercel.app](https://phase-two-capstone-project-uwr9.vercel.app)
