@@ -142,7 +142,7 @@ function WritePageContent() {
       }
 
       if (publish) {
-        router.push(`/posts/${postData.slug}`)
+        router.push('/posts')
       } else {
         alert('Draft saved successfully!')
       }

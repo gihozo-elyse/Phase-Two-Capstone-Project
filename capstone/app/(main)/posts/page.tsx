@@ -1,36 +1,28 @@
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
+'use client'
 
+import { useState, useEffect } from 'react'
 import PostCard from '@/components/post/PostCard';
 
-async function getPosts() {
-  try {
-    // For server-side rendering, we need absolute URLs
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : 'http://localhost:3000';
-    
-    const url = `${baseUrl}/api/posts?published=true&limit=20`;
-    console.log('Server-side fetching from:', url);
-    
-    const res = await fetch(url, {
-      cache: "no-store",
-    });
+export default function PostsPage() {
+  const [posts, setPosts] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error('Fetch failed:', res.status, errorText);
-      throw new Error(`Failed to fetch posts: ${res.status}`);
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const res = await fetch('/api/posts?published=true&limit=20')
+        if (res.ok) {
+          const data = await res.json()
+          setPosts(data)
+        }
+      } catch (error) {
+        console.error('Error fetching posts:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-    return await res.json();
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    return [];
-  }
-}
-
-export default async function PostsPage() {
-  const posts = await getPosts();
+    fetchPosts()
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
@@ -41,7 +33,11 @@ export default async function PostsPage() {
           </h1>
 
           <div className="space-y-8">
-            {posts && posts.length > 0 ? (
+            {loading ? (
+              <div className="text-center py-12">
+                <p className="text-gray-400 text-lg">Loading posts...</p>
+              </div>
+            ) : posts && posts.length > 0 ? (
               posts.map((post: any) => (
                 <PostCard key={post.id} post={post} />
               ))

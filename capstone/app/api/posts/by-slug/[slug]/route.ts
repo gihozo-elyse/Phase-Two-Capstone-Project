@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Document } from 'mongoose'
 import connectDB from '@/lib/mongodb'
 import Post from '../../../../models/Post'
+import User from '../../../../models/User'
 import Like from '../../../../models/Like'
 import Comment from '../../../../models/Comment'
 

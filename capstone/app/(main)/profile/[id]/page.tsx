@@ -1,42 +1,58 @@
-import { notFound } from 'next/navigation'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import PostCard from '@/components/post/PostCard'
 import FollowButton from '@/components/user/FollowButton'
 import Image from 'next/image'
 
-const getBaseUrl = () => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL
-  }
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`
-  }
-  return 'http://localhost:3000'
-}
+export default function ProfilePage() {
+  const params = useParams()
+  const [profile, setProfile] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
 
-//getting profile
-async function getProfile(id: string) {
-  try {
-    const baseUrl = getBaseUrl()
-    const res = await fetch(`${baseUrl}/api/users/${id}`, {
-      cache: 'no-store',
-    })
-    if (!res.ok) return null
-    return await res.json()
-  } catch (error) {
-    console.error('Error fetching profile:', error)
-    return null
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await fetch(`/api/users/${params.id}`)
+        if (res.ok) {
+          const data = await res.json()
+          setProfile(data)
+        } else {
+          setNotFound(true)
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error)
+        setNotFound(true)
+      } finally {
+        setLoading(false)
+      }
+    }
+    if (params.id) {
+      fetchProfile()
+    }
+  }, [params.id])
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <p className="text-gray-400">Loading profile...</p>
+        </div>
+      </div>
+    )
   }
-}
 
-export default async function ProfilePage({
-  params,
-}: {
-  params: { id: string }
-}) {
-  const profile = await getProfile(params.id)
-
-  if (!profile) {
-    notFound()
+  if (notFound || !profile) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Profile Not Found</h1>
+          <p className="text-gray-400">The profile you're looking for doesn't exist.</p>
+        </div>
+      </div>
+    )
   }
 
   const posts = profile.posts || []
@@ -74,7 +90,7 @@ export default async function ProfilePage({
                   <span className="text-gray-600">Following</span>
                 </div>
               </div>
-              <FollowButton userId={params.id} />
+              <FollowButton userId={params.id as string} />
             </div>
           </div>
         </div>
